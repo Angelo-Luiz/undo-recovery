@@ -1,29 +1,22 @@
-import pgsql from 'pg';
-import { config } from 'dotenv';
-import metadado from './entries/metadado.js';
-import { env } from 'process';
+import fs from 'fs'
+import TabelaHelper from './helpers/TableHelper.js';
+import LogHelper from './helpers/LogHelper.js';
 
-const envPath = "./.env"
-config({ path: envPath})
-const db = new pgsql.Pool({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_DATABASE,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-});
+const filePathJsonTable = './entries/metadado.json';
+const filePathLog = './entries/entradaLog.txt';
 
-db.on('connect', (client) => {
-    console.log('Conectado ao PostgreSQL');
-    client.release();
-});
-
-db.on('error', (err, client) => {
-    console.error('Erro na conexão:', err);
-    if (client) {
-        client.release();
+const tabelaJson = async () => {
+    try{
+        const data = await fs.promises.readFile(filePathJsonTable, 'utf-8');
+        const tableJson = JSON.parse(data);
+        const log = await fs.promises.readFile(filePathLog, 'utf-8');
+        let arrayUndo = LogHelper.procuraEndCheckpoint(log);
+        let transacaoUndo = LogHelper.checkUndoTransaction(arrayUndo);
+        let dat = TabelaHelper.getById(22, tableJson)
+        console.log(dat)
+    }catch(e) {
+        console.log('Erro ao ler arquivos: ', e);
     }
-});
+};
 
-console.log(db)
-console.log(process.env.DB_PASSWORD)
+tabelaJson();
