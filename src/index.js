@@ -12,8 +12,8 @@ const tabelaJson = async () => {
         const log = await fs.promises.readFile(filePathLog, 'utf-8');
         let arrayUndo = LogHelper.procuraEndCheckpoint(log);
         let transacaoUndo = LogHelper.checkUndoTransaction(arrayUndo);
-        let dat = TabelaHelper.getById(22, tableJson)
-        console.log(dat)
+        let dat = TabelaHelper.getById(2, tableJson)
+        console.log(LogHelper.trataArrayLog(arrayUndo))
     }catch(e) {
         console.log('Erro ao ler arquivos: ', e);
     }

@@ -30,4 +30,14 @@ export default class LogHelper {
         return arrayUndo;
     }
 
+    static trataArrayLog(arrayLog){
+        const regex = '/<.*?>/g';
+        if(arrayLog) {
+            
+                let returro = arrayLog.map(str => str.replace(/<|>/g, ''))
+                return returro;
+            
+        }
+    }
+
 }
