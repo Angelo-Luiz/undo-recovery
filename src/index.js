@@ -1,6 +1,7 @@
 import fs from 'fs'
-import TabelaHelper from './helpers/TableHelper.js';
 import LogHelper from './helpers/LogHelper.js';
+import TableHelper from './helpers/TableHelper.js';
+import UndoHelper from './helpers/UndoHelper.js';
 
 const filePathJsonTable = './entries/metadado.json';
 const filePathLog = './entries/entradaLog.txt';
@@ -12,8 +13,9 @@ const tabelaJson = async () => {
         const log = await fs.promises.readFile(filePathLog, 'utf-8');
         let arrayUndo = LogHelper.procuraEndCheckpoint(log);
         let transacaoUndo = LogHelper.checkUndoTransaction(arrayUndo);
-        let dat = TabelaHelper.getById(2, tableJson)
-        console.log(LogHelper.trataArrayLog(arrayUndo))
+        let dat = LogHelper.trataArrayLog(arrayUndo)
+        UndoHelper.undoRecovery(dat, transacaoUndo)
+        TableHelper.updateById(2, 'C', 333, tableJson)
     }catch(e) {
         console.log('Erro ao ler arquivos: ', e);
     }

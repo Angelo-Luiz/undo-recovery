@@ -1,4 +1,6 @@
-export default class TabelaHelper {
+import LogHelper from "./LogHelper.js";
+
+export default class TableHelper {
     constructor() {}
 
     static getById(id, json) {
@@ -19,5 +21,14 @@ export default class TabelaHelper {
         });
         
         return arrayDados;
+    }
+
+    static updateById(indice, coluna, valor, table) {
+        Object.keys(table.table).forEach(e => {
+            if(e === coluna) {
+                table.table[coluna][indice] = valor;
+                LogHelper.gravaJson(table);
+            }
+        })
     }
 }
