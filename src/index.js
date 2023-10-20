@@ -14,8 +14,9 @@ const tabelaJson = async () => {
         let arrayUndo = LogHelper.procuraEndCheckpoint(log);
         let transacaoUndo = LogHelper.checkUndoTransaction(arrayUndo);
         let dat = LogHelper.trataArrayLog(arrayUndo)
-        UndoHelper.undoRecovery(dat, transacaoUndo)
+        UndoHelper.undoRecovery(dat, transacaoUndo, tableJson)
         TableHelper.updateById(2, 'C', 333, tableJson)
+        // console.log(TableHelper.getById('1', tableJson))
     }catch(e) {
         console.log('Erro ao ler arquivos: ', e);
     }
