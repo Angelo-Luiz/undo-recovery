@@ -15,8 +15,8 @@ const tabelaJson = async () => {
         let arrayUndo = LogHelper.procuraEndCheckpoint(log);
         let commitados = LogHelper.checkCommitedAndUncommitedTransactions(arrayUndo);
         let arrayTransacoesGravadas = LogHelper.prepareArrayUndoRecovery(arrayUndo.beforeEnd, commitados);
-        UndoHelper.undoRecovery
-
+        let undo = UndoHelper.undoRecovery(tableJson, arrayTransacoesGravadas);
+        //falta finalizar o retorno
     }catch(e) {
         console.log('Erro ao ler arquivos: ', e);
     }

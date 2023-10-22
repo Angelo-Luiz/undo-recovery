@@ -1,35 +1,20 @@
 import LogHelper from "./LogHelper.js";
-import UndoError from "../Exceptions/UndoError.js";
 import TableHelper from "./TableHelper.js";
 
 export default class UndoHelper{
     constructor() {}
 
-    static undoRecovery(logs, transacoes, tabela) {
-        
-        if(logs.length === 0 || transacoes.length === 0) {
-            throw new UndoError('dados inválidos');
+  static undoRecovery(tabela, transacoes) {
+    let valoresAlterados = [];
+    for(let i of transacoes) {
+        let indice  = TableHelper.getIndexById(parseInt(i[1]), tabela);
+        if(indice === NaN) {
+            throw new Error("indice invalido");
         }
-
-        if(logs.length > 0) {
-            logs.forEach(element => {
-                let arrayLog = LogHelper.preparaLogUndo(element);
-                if(arrayLog[0].startsWith('T')) {                   
-                    let indice = TableHelper.getIndexById(parseInt(arrayLog[1]), tabela);
-                    TableHelper.updateById(indice, arrayLog[2], arrayLog[3], tabela)
-                    console.log(arrayLog)
-                    console.log(tabela)
-                }
-                
-                               
-            });
-        }
-
-
-        if(transacoes.length > 0) {
-            for(let i of transacoes) {
-                console.log(`Transação ${i} realizou UNDO`);
-            }
-        }
+        TableHelper.updateById(indice, parseInt(i[2]), parseInt(i[3]), tabela);
+        valoresAlterados.push(i);
     }
+    return valoresAlterados;
+
+  }
 }

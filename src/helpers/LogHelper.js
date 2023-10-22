@@ -1,4 +1,3 @@
-import { transcode } from 'buffer';
 import fs from 'fs'; 
 
 export default class LogHelper {
