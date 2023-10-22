@@ -5,10 +5,15 @@
 <START CKPT(T2)>
 <T2,2, B,20>	
 <commit T2>
-<END CKPT>
 <start T3>
+<T3,1, B,40>
+<commit T3>
+<END CKPT>
+<T3,3, C,30>
 <start T4>
-<T4,1,D,2212>
-<T4,2,A,523>
-<T4,3,C,1117>
+<T4,1,D,34>
+<T4,2,A,5323>
+<commit T3>
+<T4,3,C,11232317>
 <start T5>
+<crash>

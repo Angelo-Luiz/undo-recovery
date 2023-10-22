@@ -11,12 +11,12 @@ const tabelaJson = async () => {
         const data = await fs.promises.readFile(filePathJsonTable, 'utf-8');
         const tableJson = JSON.parse(data);
         const log = await fs.promises.readFile(filePathLog, 'utf-8');
+
         let arrayUndo = LogHelper.procuraEndCheckpoint(log);
-        let transacaoUndo = LogHelper.checkUndoTransaction(arrayUndo);
-        let dat = LogHelper.trataArrayLog(arrayUndo)
-        UndoHelper.undoRecovery(dat, transacaoUndo, tableJson)
-        TableHelper.updateById(2, 'C', 333, tableJson)
-        // console.log(TableHelper.getById('1', tableJson))
+        let commitados = LogHelper.checkCommitedAndUncommitedTransactions(arrayUndo);
+        let arrayTransacoesGravadas = LogHelper.prepareArrayUndoRecovery(arrayUndo.beforeEnd, commitados);
+        UndoHelper.undoRecovery
+
     }catch(e) {
         console.log('Erro ao ler arquivos: ', e);
     }
