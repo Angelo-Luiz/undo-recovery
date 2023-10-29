@@ -28,7 +28,6 @@ export default class LogHelper {
         let retorno = {};
 
         for (let i of arrayLogs) {
-            
             if(i.startsWith(`start`)){
                 let transacao = i.split(` `)
                 transacao = transacao[1]
@@ -51,16 +50,18 @@ export default class LogHelper {
         arrayUncommited = arrayUncommited.filter(item => !arrayCommited.includes(item));
         retorno.commited = arrayCommited;
         retorno.uncommited = arrayUncommited;
-
         return retorno;
 
     }
 
     static prepareArrayUndo(arrayLogs, transacoes) {
         let arrayUndo = [];
-        for(let i of transacoes.uncommited) {
+        for(let i of transacoes.transacoesAtivas) {
+            i = i.replace(' ', '');
             for(let j of arrayLogs) {
                 if(j.startsWith(`crash`)) break;
+                if(j.startsWith(`END`)) break;
+               
                 if(j.startsWith(i)) {
                     arrayUndo.push(j.replace(` `, ``).split(`,`));
                 }
@@ -71,11 +72,27 @@ export default class LogHelper {
 
     static gravaJson(json, transacao) {
         try {
-            let tablePath = './entries/metadado.json';
+            let outputPath = './output/metadado_undo.json';
             let conteudo = JSON.stringify(json, null, 2);
-            fs.writeFileSync(tablePath, conteudo, 'utf-8');
+
+            fs.access(outputPath, fs.constants.F_OK, (error) => {
+                if(error) {
+                    fs.writeFile(outputPath, conteudo,  'utf-8', (error) => {
+                        if(error) {
+                            throw new Error('Erro ao criar arquivo de saida.')
+                        }
+                    });
+                } else {
+                    fs.writeFile(outputPath, conteudo, 'utf-8', (error) => {
+                        if(error) {
+                            throw new Error('Erro ao sobrescrever arquivo de saida.')
+                        }
+                    });
+                }
+            });
+
         }catch(error) {
-            console.log(`Erro ao gravar a transação ${transacao}: ${error}`);
+            console.log(error);
         }
     }
 

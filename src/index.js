@@ -1,7 +1,6 @@
-import fs from 'fs'
+import fs from 'fs';
 import LogHelper from './helpers/LogHelper.js';
 import UndoHelper from './helpers/UndoHelper.js';
-import Postgres from './DB/Postgres.js';
 
 const filePathJsonTable = './entries/metadado.json';
 const filePathLog = './entries/entradaLog.txt';
@@ -11,7 +10,6 @@ const undo = async () => {
         const data = await fs.promises.readFile(filePathJsonTable, 'utf-8');
         const tableJson = JSON.parse(data);
         const log = await fs.promises.readFile(filePathLog, 'utf-8');
-        let pgsql = new Postgres();
        
         let arrayLogs = log.replace(/[<>\r\t]/g, '').split('\n');
         LogHelper.logsValidate(arrayLogs);
@@ -20,10 +18,7 @@ const undo = async () => {
         let arrayUndo = LogHelper.prepareArrayUndo(arrayLogs, transacoes);
         let undo = UndoHelper.undoRecovery(tableJson, arrayUndo);
         
-        pgsql.criaTabela();
-        pgsql.insereTuplas(arrayUndo);
-        
-        // UndoHelper.renderResponse(undo, transacoes, tableJson);
+        UndoHelper.renderResponse(undo, transacoes);
 
     }catch(e) {
         console.log('Erro Undo: ', e);

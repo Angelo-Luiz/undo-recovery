@@ -5,12 +5,12 @@ export default class UndoHelper{
 
     static undoRecovery(tabela, transacoes) {
         let retorno = [];
-
         for(let transacao of transacoes) {
             let indice = TableHelper.getIndexById(parseInt(transacao[1]), tabela);
-            
             Object.keys(tabela.table).forEach(tableIndex => {
+                transacao[2] = transacao[2].replace(' ', '');
                 if(tableIndex === transacao[2]){
+                    // console.log(indice, transacao[2], parseInt(transacao[3]), tabela)
                     TableHelper.updateById(indice, transacao[2], parseInt(transacao[3]), tabela);
                     let obj = {
                         "coluna": transacao[2],
@@ -18,7 +18,7 @@ export default class UndoHelper{
                         "valor": parseInt(transacao[3]),
                         "transacao": transacao[0]
                     }
-                    retorno.push(obj);
+                    retorno.push(obj);  
                 }
             });
         }
@@ -26,14 +26,12 @@ export default class UndoHelper{
         return retorno;
     }
 
-    static renderResponse(transacoes, realizouUndo, newTable) {
+    static renderResponse(transacoes, realizouUndo) {
         const response = {
             "text": [],
             "alteracoes": transacoes,
-            "Tabela Recuperada": newTable.table
-            
         }
-        realizouUndo.uncommited.forEach(transacao => {
+        realizouUndo.transacoesAtivas.forEach(transacao => {
            response.text.push(`Transacao ${transacao} realizou UNDO`)
         });
         console.log(response)
