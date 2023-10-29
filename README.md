@@ -1,6 +1,6 @@
 # UNDO Recovery
 
-## instruções de uso
+## Instruções de uso
 
 1. Será necessário instalar o nodejs e o npm caso não tenha.
 2. Após instalar o nodejs e o npm, na raiz do projeto execute o comando 'npm install', para instalar as dependências do projeto.
